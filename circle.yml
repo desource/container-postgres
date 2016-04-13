@@ -6,12 +6,15 @@ dependencies:
   pre:
     - docker info
   override:
-    - docker build --pull -t desource/postgres:9.4 .
-    - docker tag -f desource/postgres:9.4 quay.io/desource/postgres:9.4
+    - docker build --pull -t desource/postgres:9.5 .
+    - docker tag -f desource/postgres:9.5 desource/postgres:9.5.2
+    - docker tag -f desource/postgres:9.5 quay.io/desource/postgres:9.5.2
+    - docker tag -f desource/postgres:9.5 quay.io/desource/postgres:9.5
 
 test:
   override:
-    - docker images
+    - docker run --rm -it --entrypoint /usr/bin/psql desource/postgres:9.5 --version
+    - docker run --rm -it --entrypoint /usr/bin/psql desource/postgres:9.5 --version | grep -qi 9.5.2
 
 deployment:
   hub:
